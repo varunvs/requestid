@@ -30,3 +30,12 @@ func RequestIDToContext() http2.RequestFunc {
 		return context.WithValue(ctx, requestIDKey, id)
 	}
 }
+
+func RequestIDToResponse() http2.ServerResponseFunc {
+	return func(ctx context.Context, writer http.ResponseWriter) context.Context {
+		id := ctx.Value(requestIDKey)
+		writer.Header().Set(requestIDHeader, id.(string))
+
+		return ctx
+	}
+}
